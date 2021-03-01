@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head>
+        <title>Registration page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+
+    <body>
+		
+		
+		
+        <div style="width:50%; margin:auto" id="container">
+        	<h2>Create account</h2>
+        	<form th:action="@{registration}" th:object="${user}" method="POST">
+        	
+        		<label for="username"> Username </label>
+        		<input type="text" required th:field="*{username}"/> <br><br>
+        		
+        		<label for="password"> Password </label>
+        		<input type="password" required th:field="*{password}"> <br><br>
+        		
+        		<input name="submit" type="submit" value="CREATE">
+        		
+        	</form>
+        	
+        	<p th:if="${registrationError}" class="error">Fields can't be null</p>
+
+        </div>
+        
+    </body>
+</html>

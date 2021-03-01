@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Create New Sale</title>
+</head>
+<body>
+    <div align="center">
+        <h1>Create New Sale</h1>
+        <br />
+        <form action="#" th:action="@{/saveSale}" method="post">
+ 
+            <table border="0" cellpadding="10">
+            	<tr>
+            		<td>Item category</td>
+            		<td>
+	            		<select th:field="${item.category}">
+	            			<option th:value="fashion" th:text="fashion"></option>
+	            			<option th:value="electronics" th:text="electronics"></option>
+	            			<option th:value="home-garden" th:text="home-garden"></option>
+	            			<option th:value="gaming" th:text="gaming"></option>
+	            		</select>
+            		</td>
+            	</tr>
+            	<!--  
+                <tr>
+                    <td>Item category</td>
+                    <td><input type="text" th:value="${item.category}" name="category"/></td>
+                </tr>
+                -->
+                <tr>
+                    <td>Title</td>
+                    <td><input type="text"  required  th:value="${sale.title}" name="title"/></td>
+                </tr>
+                <tr>
+                    <td>Price:</td>
+                    <td><input type="number"  required  th:value="${sale.price}" name="price" /></td>
+                </tr>    
+                <!--   
+                <tr>
+                <td>Seller name:</td>
+                    <td><input type="text" th:value="${sale.seller.username}" name="user.username" /></td>
+                </tr>  
+                <tr>  
+                <td>Seller id:</td>
+                    <td><input type="text" th:value="${sale.seller.id}" name="user.id" /></td>
+                </tr>        
+                  -->
+                <tr>
+                    <td colspan="2"><button type="submit">Save</button> </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</body>
+</html>

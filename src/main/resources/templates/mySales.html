@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<style>
+.styled-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+</style>
+</head>
+
+<body>
+
+<div style="width:50%; margin:auto" >
+
+    <div  sec:authorize="isAuthenticated()">
+      Authenticated as <span sec:authentication="name"></span></div>
+      <br><br>
+      
+      <!-- 
+      <form action="/all">
+		    <input type="submit" value="Home" />
+	  </form> 
+      <form action="/myOrders">
+		    <input type="submit" value="My Orders" />
+	  </form>
+      <form action="/myAuctions">
+		    <input type="submit" value="My Auctions" />
+	  </form>
+      <form action="/logout">
+		    <input type="submit" value="Log Out" />
+	  </form>
+	  -->
+      <button>
+      		<a style="text-decoration: none" href="/all">Home</a>
+      </button>
+      <button>      
+      		<a style="text-decoration: none" href="/myOrders">My Orders</a>
+      </button>  
+      <button>      
+      		<a style="text-decoration: none" href="/myAuctions">My Auctions</a>
+      </button>  
+      <button>
+      		<a style="text-decoration: none"  href="/logout">Log out</a>
+      </button>
+      
+	  <br></br>
+	  <br></br>
+	  <form th:action="@{/mySales}">
+	    <select th:name="currency" onchange="this.form.submit()" >
+	    	<option value="currency" selected>Change $ £ € </option>
+	        <option value="€">EUR</option>
+	        <option value="$">USD</option>
+	        <option value="£">GBP</option>
+	    </select>
+	  </form>
+      <h2>My Sales</h2>
+			<table class="styled-table" th:object="${sales}">
+
+				<tr>
+					<th>ID</th>
+					<th>Category</th>
+					<th>Seller</th>
+					<th>Title</th>
+					<th>Price</th>
+				</tr>
+
+			    <tr th:each="s :${sales}">
+			    
+			        <td  th:text="${s.id}"></td>
+			        <td  th:text="${s.item.category}"></td>
+			        <td  th:text="${s.seller.username}"></td>
+			        <td  th:text="${s.title}"></td>
+			    	<td  th:text=" ${ #numbers.formatInteger(s.price * mult, 0, 'COMMA') } + ' ' + ${currency}"></td> 
+			    	<td>
+			    	<td>
+			    		<button><a th:href="@{'/deleteSale/' + ${s.id}}"> Delete </a></button>	
+			    	</td>
+			    	<td>
+			    		<button><a th:href="@{'/editSale/' + ${s.id}}"> Edit </a></button>	
+			    	</td>			
+			    </tr>
+			    
+			</table>
+			<button>
+      				<a style="text-decoration: none"  href="/newSale">Add Sale</a>
+      		</button>
+      </div>
+</div>
+</body>
+
+</html>

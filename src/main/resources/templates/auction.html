@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<style>
+.styled-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+</style>
+</head>
+
+<body>
+	  <!-- 
+      <form action="/all">
+		    <input type="submit" value="Home" />
+	  </form>
+      <form action="/mySales">
+		    <input type="submit" value="My Sales" />
+	  </form>
+      <form action="/myAuctions">
+		    <input type="submit" value="My Auctions" />
+	  </form>
+      <form action="/logout">
+		    <input type="submit" value="Log Out" />
+	  </form>
+	   -->
+      <button>
+      		<a style="text-decoration: none" href="/all">Home</a>
+      </button>     
+      <button>
+      		<a style="text-decoration: none" href="/mySales">My Sales</a>
+      </button>
+      
+      <button>      
+      		<a style="text-decoration: none" href="/myAuctions">My Auctions</a>
+      </button>  
+      
+      <button>
+      		<a style="text-decoration: none" type="button" href="/logout">Log out</a>
+      </button>
+      <br><br>
+      
+      <div align="center" id="wrapper">
+      
+		<form th:action="@{/auction/} + ${auction.id}">
+		    <select th:name="currency" onchange="this.form.submit()" >
+		    	<option value="currency" selected>Change $ £ € </option>
+		        <option value="€">EUR</option>
+		        <option value="$">USD</option>
+		        <option value="£">GBP</option>
+		    </select>
+		</form>
+		
+      <form th:action="@{/addBid}"  method="POST">
+            <input type="hidden" th:value="${auction.id}" name="id">
+            
+      		<table class="styled-table"  border="1">
+			    <tr>
+			    
+			        <td>ID</td>
+			        <td>Category</td>
+			        <td>Seller</td>
+			        <td>Title</td>
+			        <td>Price</td>
+			        <td>Last Bid</td>
+			    </tr>
+			    <tr>
+			    
+			        <td  th:text="${auction.id}"></td>
+			        <td  th:text="${auction.item.category}"></td>
+			        <td  th:text="${auction.seller.username}"></td>
+			        <td  th:text="${auction.title}"></td>
+			        <td  th:text=" ${#numbers.formatInteger(mult * auction.price,0,'COMMA')} + ' ' + ${currency}"></td>
+			    	<td  th:text=" ${#numbers.formatInteger(mult * auction.last_bid_price,0,'COMMA')} + ' ' + ${currency}"></td>
+			    	
+			    </tr>
+      		</table>
+      		
+      		 
+      		 <!--  
+      		<input type="hidden" th:value="${auction.id}" name="id">
+            <div id="auction"  class="box">
+		 		 <p><b>ID:</b> <span th:utext="${auction.id}"></span></p>
+		 		 <p><b>Category:</b> <span th:utext="${auction.item.category}"></span></p>
+		 		 <p><b>Seller:</b> <span th:utext="${auction.seller.username}"></span></p>
+		 		 <p><b>Title:</b> <span th:utext="${auction.title}"></span></p>
+		 		 <p><b>Price:</b> <span th:utext="${auction.price}"></span></p>
+	  		</div>
+	  		-->
+            <div  id="bids"  class="box">
+            	 <h2>Actuals bids</h2>
+            	 
+		 		 <table class="styled-table" border="1">
+				    <tr th:each="b :${bids}">
+				        <td  th:text="${b.bidder.username}"></td>	
+				        <td  th:text="${#numbers.formatInteger(b.bid_price * mult, 0, 'COMMA')} + ' ' +${currency} "></td>
+				    </tr>  
+				</table>
+			</div>   
+			
+			<div id="bid">
+				
+				
+				<table class="styled-table" border="1">
+					<tr>
+						<td><input type="hidden" th:value="${currency}" name="currency"></td>
+						<td><input type="hidden" th:value="${mult}" name="mult"></td>
+						<td><input required type="number" th:field="${my_bid.bid_price}" /></td>
+						<td><button type="submit">Bid</button></td>
+					</tr>		
+				</table>
+				<input type="hidden" th:value="${my_bid.id}"/>
+
+			</div>
+	  <!-- 
+	  <button type="submit">Bid</button>  -->	
+	  </form>		
+	  		
+      </div>
+		
+ 
+</body>
+<script type="text/javascript">
+
+function reload(){
+	console.log("reload " + event)
+}
+
+function bid(){
+	console.log("bid " + event)
+}
+
+</script>
+<style>
+#wrapper {
+  display: flex;
+}
+
+#auction {
+  border: 1;
+  flex: 0 0 65%;
+}
+
+#bids {
+  border: 1;
+  flex: 1;
+}
+</style>
+</html>

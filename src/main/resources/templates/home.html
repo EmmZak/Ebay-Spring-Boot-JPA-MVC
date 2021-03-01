@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+<style>
+.styled-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+</style>
+
+</head>
+
+<body>
+	<!-- Main div -->
+	<div style="width:50%; margin:auto" >
+
+    <div  sec:authorize="isAuthenticated()">
+      Authenticated as <span sec:authentication="name"></span></div>
+  	  <br><br>
+      <!-- 
+      <form action="/mySales">
+		    <input type="submit" value="My Sales" />
+	  </form>
+      <form action="/myAuctions">
+		    <input type="submit" value="My Auctions" />
+	  </form>
+	  <form action="/myOrders">
+		    <input type="submit" value="My Orders" />
+	  </form>
+      <form action="/logout">
+		    <input type="submit" value="Log Out" />
+	  </form>
+	  -->
+      <button>
+      		<a style="text-decoration: none" href="/mySales">My Sales</a>
+      </button>
+      <button>
+      		<a style="text-decoration: none" href="/myOrders">My Orders</a>
+      </button>
+      <button>      
+      		<a style="text-decoration: none" href="/myAuctions">My Auctions</a>
+      </button>  
+      <button>
+      		<a style="text-decoration: none" type="button" href="/logout">Log out</a>
+      </button>
+      
+      <!--  category  -->
+      <br><br>
+      <h1>Categories</h1>
+      <table style="width:50%; margin:auto" >
+		  <tr>
+		      <button>
+		      		<a style="text-decoration: none"  href="/all">All</a>
+		      </button>
+		      <button>
+		      		<a style="text-decoration: none"  href="/fashion">Fashion</a>
+		      </button>
+		      	      <button>
+		      		<a style="text-decoration: none"  href="/electronics">Electronics</a>
+		      </button>
+		      	      <button>
+		      		<a style="text-decoration: none"  href="/homegarden">Home/Garden</a>
+		      </button>
+		      	      <button>
+		      		<a style="text-decoration: none"  href="/gaming">Gaming</a>
+		      </button>
+			  <!-- currency -->
+			  <br></br>
+			  <br></br>
+			  <form th:action="@{/} + ${categ}">
+				  <select th:name="currency"  onchange="this.form.submit()" >
+					  <option value="currency" selected>Change $ £ € </option>
+					  <option value="€">EUR</option>
+					  <option value="$">USD</option>
+					  <option value="£">GBP</option>
+				  </select>
+			  </form>
+
+			  <form th:action="@{/} + ${categ}"  >
+				  <select th:name="filter" onchange="this.form.submit()">
+					  <option value="filter" selected>Sort</option>
+					  <option value="low">Low to High</option>
+					  <option value="high">High to Low</option>
+				  </select>
+			  </form>
+
+			  <!-- currency -->
+		  </tr>
+	  </table>
+	
+      <h2>Sales</h2>
+			<table  class="styled-table"  border="1">
+			    <tr>
+			    
+			        <th>ID</th>
+			        <th>Category</th>
+			        <th>Seller</th>
+			        <th>Title</th>
+			        <th>Price</th>
+			        <th>
+			        	Actions 
+			        </th>
+			    </tr>
+			    <tr th:each="s :${sales}">
+			    
+			        <td  th:text="${s.id}"></td>
+			        <td  th:text="${s.item.category}"></td>
+			        <td  th:text="${s.seller.username}"></td>
+			        <td  th:text="${s.title}"></td>
+			        <td  th:text=" ${#numbers.formatInteger(mult * s.price,0,'COMMA')} + ' ' + ${currency}"></td>
+			        <!-- 
+				    <td  th:text="${s.price}*${mult} + ' ' + ${currency}"></td>
+				     -->
+				    <td>
+			        	<button>
+			        		<a style="text-decoration: none" th:href="@{'/buy/' + ${s.id}}"> Buy </a>
+			        	</button>
+			        </td>
+			    </tr>
+			    
+			</table>
+      
+      <h2>Auctions</h2>
+			<table  class="styled-table"  border="1">
+			    <tr>
+			    
+			        <th>ID</th>
+			        <th>Category</th>
+			        <th>Seller</th>
+			        <th>Title</th>
+			        <th>Price</th>
+			        <th>Last Bid</th>
+			        <th>
+			        	Actions 
+			        </th>
+			    </tr>
+			    <tr th:each="a :${auctions}">
+			    
+			        <td  th:text="${a.id}"></td>
+			        <td  th:text="${a.item.category}"></td>
+			        <td  th:text="${a.seller.username}"></td>
+			        <td  th:text="${a.title}"></td>
+			        <td  th:text=" ${#numbers.formatInteger(mult * a.price,0,'COMMA')} + ' ' + ${currency}"></td>
+			    	<td  th:text=" ${#numbers.formatInteger(mult * a.last_bid_price,0,'COMMA')} + ' ' + ${currency}"></td>
+			    	<!--  
+			    	<td  th:text="${a.last_bid_price}*${mult} + ' ' + ${currency}"></td>
+			    	-->
+			        <td>
+			            
+			        	<button>
+			        		<a style="text-decoration: none" th:href="@{'/auction/' + ${a.id}}"> Bid </a>
+			        	</button>
+			        </td>
+			    </tr>
+			    
+			</table>
+  
+	</div> 
+	
+</div>
+
+<script>
+
+function changed(){
+	console.log("changed")
+}
+
+</script>
+</body>
+</html>

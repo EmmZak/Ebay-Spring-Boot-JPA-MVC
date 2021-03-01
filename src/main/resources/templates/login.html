@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head>
+        <title>Login page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+
+    <body>
+		
+        <div style="width:50%; height:50%; margin:auto" id="container">
+        	<h2>Log In</h2>
+            
+        	<form th:action="@{login}" th:modelAttribute="user" th:object="${user}" method="POST">
+        	
+        		<label for="username"> Username </label>
+        		<input type="text"  required  th:field="*{username}"/> <br><br>
+        		
+        		<label for="password"> Password </label>
+        		<input type="password"  required  th:field="*{password}">  <br><br>
+        		
+        		<input name="submit" type="submit" value="CONNEXION">
+		        <button>
+		      		<a style="text-decoration: none" href="/registration">CREATE ACCOUNT</a>
+		        </button>   
+        	</form>
+        	
+        </div>
+        <div style="width:50%; margin:auto">
+        	<p  th:if="${loginError}" class="error">Wrong user or password</p>
+        </div>
+        <br><br>
+        <!-- 
+        <div style="border:2px solid; width:50%; margin:auto">
+	        <button>
+	      		<a style="text-decoration: none" href="/registration">CREATE ACCOUNT</a>
+	        </button>        
+        </div>
+		 -->
+
+        
+    </body>
+</html>
